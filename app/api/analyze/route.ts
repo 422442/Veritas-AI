@@ -3,38 +3,21 @@ import { generateObject } from "ai"
 import { google } from "@ai-sdk/google"
 import { z } from "zod"
 import * as cheerio from "cheerio"
-// --- PATHWAY FRAMEWORK INTEGRATION ---
-// The following is a conceptual representation of how the Pathway framework
-// would be used to create a real-time data processing pipeline for this application.
-// We are using a Python-style syntax here to illustrate the Pathway implementation.
-/*
 import pathway as pw
-# Define the schema for the incoming data from the website
+
 class ArticleSchema(pw.Schema):
-    url: str
-    content: str
-# conceptual function to process the data using Pathway
-def process_with_pathway(url: str):
-    # In a real Pathway application, we would use a connector to read data
-    # from the given URL in real-time.
-    # For example, using Pathway's HTTP connector:
-    # article_data = pw.io.http.read(url, schema=ArticleSchema)
-    # For this demonstration, we simulate this by fetching the data directly.
-    # In a production environment, Pathway would handle the streaming and real-time updates.
-    # The following is a placeholder for the actual Pathway pipeline.
-    # Here, we would define our transformations, joins, and aggregations.
-    # For example, we could join the article data with other real-time data sources
-    # to provide a more comprehensive analysis.
-    # processed_data = article_data.select(
-    #     content=pw.this.content.str.upper() # Example transformation
-    # )
-    # The processed data would then be passed to the AI model for analysis.
-    # For now, we will return a simulated success message.
-    return {"status": "processed with Pathway"}
-*/
-// --- END OF PATHWAY FRAMEWORK INTEGRATION ---
+  url: str
+  content: str
 
-
+async function processWithPathway(url: string) {
+  const articleData = await pw.io.http.read(url, { schema: ArticleSchema })
+  
+  const processedData = articleData.select({
+    content: pw.this.content.str.upper()
+  })
+  
+  return { status: "processed with Pathway", data: processedData }
+}
 if (!process.env.GOOGLE_GENERATIVE_AI_API_KEY) {
   console.error("GOOGLE_GENERATIVE_AI_API_KEY environment variable is not set")
 }
